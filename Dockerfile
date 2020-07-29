@@ -10,6 +10,8 @@ ENV DOCKER_HOST="unix:///var/run/docker.sock"
 RUN touch /data/test
 VOLUME [ "/data" ]
 
+ENV GITSTACK="https://github.com/fcasarsa/harc"
+
 CMD /start.sh
 
 

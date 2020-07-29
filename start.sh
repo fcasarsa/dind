@@ -1,5 +1,6 @@
 #!/bin/sh
 
+
 cd /data
 
 if ! test -f /data/dropbear_rsa_host_key
@@ -16,6 +17,8 @@ if ! test -d /data/stack
 then
     mkdir -p /data/stack
 fi
+
+screen -wipe
 
 screen -dmS dropbear dropbear -r /data/dropbear_rsa_host_key -E -F 
 screen -dmS dockerd dockerd 
