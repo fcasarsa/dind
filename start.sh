@@ -1,6 +1,8 @@
 #!/bin/sh
 
 
+# mount -t devtmpfs devtmpfs /dev
+
 cd /data
 
 if ! test -f /data/dropbear_rsa_host_key
@@ -18,35 +20,57 @@ then
     mkdir -p /data/stack
 fi
 
+if ! test -d /data/stack/ext_storage
+then
+    mkdir -p /data/stack/ext_storage
+fi
+
+if test $EXT_STORAGE
+then
+    mount $EXT_STORAGE /data/stack/ext_storage
+fi
+
 screen -wipe
 
 screen -dmS dropbear dropbear -r /data/dropbear_rsa_host_key -E -F 
-screen -dmS dockerd dockerd 
+screen -dmS dockerd /bin/sh -c "while true; do dockerd; sleep 1; done"
 
-while ! docker ps > /dev/null
-do
-    sleep 1
-done
 
-cd /data/stack
+# trap : TERM INT
+# tail -f /dev/null & wait
 
-while true
-do
-    if ! test -f docker-compose.yml
-    then
-        echo "looking for compose file"
-        sleep 1    
-    else
-        echo "found."
-        break
-    fi
+#while true
+#do
+#    tail -f /dev/null & wait
+#    sleep 1
+#done
+
+exec tail -f /dev/null
+
+# while ! docker ps > /dev/null
+# do
+#     sleep 1
+# done
+
+# cd /data/stack
+
+# while true
+# do
+#     if ! test -f docker-compose.yml
+#     then
+#         echo "looking for compose file"
+#         sleep 1    
+#     else
+#         echo "found."
+#         break
+#     fi
     
-done
+# done
 
-screen -dmS docker-compose docker-compose --remove-orphans up 
+# screen -dmS docker-compose docker-compose --remove-orphans up 
+
+
 # exec dropbear -r /data/dropbear_rsa_host_key -E -F 
 
-trap : TERM INT
-tail -f /dev/null & wait
 
 
