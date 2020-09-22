@@ -1,7 +1,9 @@
 #!/bin/sh
 
 
-mount -t devtmpfs devtmpfs /dev
+# mount -t devtmpfs devtmpfs /dev
+# causes open /dev/ptmx error
+
 
 cd /data
 
