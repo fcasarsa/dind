@@ -1,7 +1,7 @@
 #!/bin/sh
 
 
-# mount -t devtmpfs devtmpfs /dev
+mount -t devtmpfs devtmpfs /dev
 
 cd /data
 
@@ -9,6 +9,7 @@ if ! test -f /data/dropbear_rsa_host_key
 then
     dropbearkey -t rsa -f /data/dropbear_rsa_host_key
 fi
+
 
 if ! test -d /data/docker
 then
@@ -19,6 +20,13 @@ if ! test -d /data/stack
 then
     mkdir -p /data/stack
 fi
+
+if ! test -d /data/dev
+then
+    mkdir -p /data/dev
+fi
+
+mount -t devtmpfs devtmpfs /data/dev
 
 if ! test -d /data/stack/ext_storage
 then
